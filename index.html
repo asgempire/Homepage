@@ -61,6 +61,12 @@
             justify-content: space-between; /* Distributes elements */
             align-items: center;
             gap: 1rem; /* Space between header elements */
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out; /* Smooth transition for hide/show */
+        }
+        .header.header-hidden {
+            transform: translateY(-100%);
+            opacity: 0;
+            pointer-events: none; /* Disable interactions when hidden */
         }
         .header .logo {
             font-family: 'Poppins', sans-serif;
@@ -1981,7 +1987,7 @@
     </div>
 
     <!-- Encabezado -->
-    <header class="header">
+    <header class="header" id="mainHeader">
         <!-- Logo en la izquierda -->
         <a href="#" class="logo" id="headerLogo">ASG Empire</a>
 
@@ -2588,6 +2594,10 @@
             const categoryTabsContainer = document.getElementById('categoryTabs');
             const categoryProductSectionsContainer = document.getElementById('categoryProductSections');
 
+            // Header for scroll behavior
+            const mainHeader = document.getElementById('mainHeader');
+            let lastScrollY = window.scrollY;
+            const scrollThreshold = 50; // Pixels to scroll before header hides/shows
 
             // Firebase Initialization
             const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
@@ -4143,6 +4153,24 @@
                     handleProductSearch();
                 }
             });
+
+            // ====================================================================================
+            // === HEADER SCROLL BEHAVIOR LOGIC ===================================================
+            // ====================================================================================
+
+            window.addEventListener('scroll', () => {
+                const currentScrollY = window.scrollY;
+
+                if (currentScrollY > lastScrollY && currentScrollY > scrollThreshold) {
+                    // Scrolling down
+                    mainHeader.classList.add('header-hidden');
+                } else if (currentScrollY < lastScrollY || currentScrollY <= scrollThreshold) {
+                    // Scrolling up or at the top
+                    mainHeader.classList.remove('header-hidden');
+                }
+                lastScrollY = currentScrollY;
+            });
+
 
             // ====================================================================================
             // === WELCOME MODAL LOGIC ============================================================
