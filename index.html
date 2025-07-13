@@ -1006,8 +1006,36 @@
             color: #cbd5e0;
             margin-bottom: 1.5rem;
         }
-        #itemAddedModal .modal-content .modal-buttons {
-            justify-content: center;
+        .modal-buttons { /* Unified modal buttons style */
+            display: flex;
+            justify-content: center; /* Center buttons by default */
+            margin-top: 1.8rem;
+            gap: 1rem;
+        }
+        .modal-buttons .btn {
+            padding: 0.8rem 1.8rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 0.6rem;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .modal-buttons .btn-primary {
+            background-color: #6366f1;
+            color: white;
+        }
+        .modal-buttons .btn-primary:hover {
+            background-color: #4f46e5;
+            transform: translateY(-2px);
+        }
+        .modal-buttons .btn-secondary {
+            background-color: #4a5568;
+            color: #e2e8f0;
+        }
+        .modal-buttons .btn-secondary:hover {
+            background-color: #6366f1;
+            color: white;
+            transform: translateY(-2px);
         }
 
         /* Product Image Carousel Styles in Modal */
@@ -1982,7 +2010,10 @@
                 <br><br>
                 **Tu aventura tecnológica comienza aquí.**
             </p>
-            <button class="btn btn-primary" id="enterSiteBtn">INGRESAR</button>
+            <div class="modal-buttons">
+                <button class="btn btn-primary" id="enterSiteBtn">INGRESAR</button>
+                <button class="btn btn-secondary" id="exitSiteBtn">SALIR</button>
+            </div>
         </div>
     </div>
 
@@ -2513,6 +2544,7 @@
             // DOM element declarations
             const welcomeModal = document.getElementById('welcomeModal');
             const enterSiteBtn = document.getElementById('enterSiteBtn');
+            const exitSiteBtn = document.getElementById('exitSiteBtn'); // New button
             const mainContentContainer = document.querySelector('.container');
 
             const itemAddedModal = document.getElementById('itemAddedModal');
@@ -2966,7 +2998,7 @@
              */
             function openModal(modalElement) {
                 document.querySelectorAll('.modal-overlay.show').forEach(openModal => {
-                    if (openModal.id !== 'welcomeModal') {
+                    if (openModal.id !== 'welcomeModal') { // Allow welcome modal to stay open if it's the current one
                         closeModal(openModal);
                     }
                 });
@@ -4099,8 +4131,8 @@
                 const closeBtn = confirmationModal.querySelector('.modal-close-btn');
 
                 confirmBtn.onclick = null;
-                cancelBtn.onclick = null;
-                closeBtn.onclick = null;
+            cancelBtn.onclick = null;
+            closeBtn.onclick = null;
 
                 confirmBtn.onclick = () => {
                     onConfirm();
@@ -4178,6 +4210,14 @@
 
             enterSiteBtn.addEventListener('click', () => {
                 closeModal(welcomeModal);
+            });
+
+            exitSiteBtn.addEventListener('click', () => {
+                closeModal(welcomeModal);
+                // Display the custom message after the welcome modal closes
+                setTimeout(() => {
+                    displayMessageModal("Muchas gracias por quedarte. ¡Bienvenido a ASG Empire!", "¡Bienvenido!");
+                }, 400); // Small delay to allow welcome modal to fully close
             });
 
             openModal(welcomeModal);
